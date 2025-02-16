@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\projects\master_thesis\code\PBDSpatialPartitioningThesis\build\CMakeFiles\c167d92a24a6ea9331048591a0f776c9\INSTALL_force.rule">
+    <CustomBuild Include="C:\projects\thesis\code\PBDSpatialPartitioningThesis\Build\CMakeFiles\13f99025c99b329577ed4bd6bdf62c5e\INSTALL_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{0CE5B080-8F1E-331D-86FD-7BC900C911B2}</UniqueIdentifier>
+      <UniqueIdentifier>{D84FF8D6-CAAD-3A69-B2FF-EE038554A5AC}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
