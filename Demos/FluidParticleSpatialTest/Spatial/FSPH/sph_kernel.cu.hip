@@ -159,7 +159,8 @@ hipEvent_t sms_force_event;
 
 void transSysParaToDevice(const SystemParameter *host_para)
 {
-    CUDA_SAFE_CALL(hipMemcpyToSymbol(HIP_SYMBOL(kDevSysPara), host_para, sizeof(SystemParameter)));
+    printf("Inside of transSysParaToDevice\n");
+    CUDA_SAFE_CALL(hipMemcpyToSymbol(HIP_SYMBOL(kDevSysPara), host_para, sizeof(SystemParameter))); //RIGHT HERE!!
     //printf("testing self_density %f\n", kDevSysPara.mass);
 }
 

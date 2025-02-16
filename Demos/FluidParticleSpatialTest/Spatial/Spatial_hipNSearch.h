@@ -12,7 +12,13 @@ namespace PBD
 	class Spatial_hipNSearch
 	{
 	public:
-		Spatial_hipNSearch(const Real radius = 0.1, const unsigned int numBoundry = 0, const unsigned int numParticle = 0) : hipNSearch(radius), m_currentTimestamp(0)
+		Spatial_hipNSearch() : hipNSearch(0.1f), m_currentTimestamp(0)
+		{
+			numberOfParticles = 0 + 0;
+			particles.reserve(numberOfParticles);
+			printf("Real3: %d; Vector3r: %d\n", sizeof(Real3), sizeof(Vector3r));
+		}
+		Spatial_hipNSearch(const Real radius = 0.1f, const unsigned int numBoundry = 0, const unsigned int numParticle = 0) : hipNSearch(radius), m_currentTimestamp(0)
 		{
 			numberOfParticles = numBoundry + numParticle;
 			particles.reserve(numberOfParticles);

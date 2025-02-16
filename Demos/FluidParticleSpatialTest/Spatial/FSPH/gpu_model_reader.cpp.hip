@@ -35,7 +35,16 @@ unsigned int readPTXStatisticsFromFile(PTXBlockStatistic *&output, const std::st
     {
         for (int i = 0; i < root.size(); ++i)
         {
-            if (func_name == root[i]["function_name"].asString())
+            
+            
+            auto tmp0 = root[i];
+
+
+            auto tmp = tmp0["function_name"];
+
+
+
+            if (func_name == tmp.asString())
             {
                 Json::Value blocks = root[i]["block_array"];
                 num_block = blocks.size();

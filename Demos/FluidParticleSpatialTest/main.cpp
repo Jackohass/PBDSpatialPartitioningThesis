@@ -76,6 +76,12 @@ string dataFilename = "D:\\projects\\master_thesis\\code\\PBDSpatialPartitioning
 // main 
 int main(int argc, char** argv)
 {
+	/*int* tmp;
+	CUDA_SAFE_CALL(hipMalloc(&tmp, 1000 * sizeof(int)));
+	CUDA_SAFE_CALL(hipMemset(tmp, 0, sizeof(int) * 1000));
+	CUDA_SAFE_CALL(hipFree(tmp));*/
+
+	REPORT_MEMORY_LEAKS
 	printf("#Arguments: %d\n", argc);
 	printf("Argument 0: %s\n", argv[0]);
 

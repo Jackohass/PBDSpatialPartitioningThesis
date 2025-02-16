@@ -123,14 +123,6 @@ public:
 	template <typename T>
 	void sort_field(T* lst);
 
-	void makeInv()
-	{
-		for (uint i = 0; i < sortIndices.size(); i++)
-		{
-			invSortIndices.at(sortIndices[i]) = i;
-		}
-	}
-
 	std::vector<uint> sortIndices;
 	std::vector<uint> invSortIndices;
 
@@ -151,43 +143,27 @@ private:
 	std::size_t m_n;	//# of points in the set
 	bool m_dynamic;		//if false the points do not move and the hash values do not change
 	void *m_user_data;
-	
+
 	std::vector<NeighborSet> neighbors;
 };
 
 
-	template <typename T>
-	void PointSet::sort_field(T* lst)
-	{
-		std::vector<T> tmp(lst, lst + sortIndices.size());
-		std::transform(sortIndices.begin(), sortIndices.end(),
+template <typename T>
+void PointSet::sort_field(T* lst)
+{
+	std::vector<T> tmp(lst, lst + sortIndices.size());
+	std::transform(sortIndices.begin(), sortIndices.end(),
 		//#ifdef _MSC_VER
 		//		stdext::unchecked_array_iterator<T*>(lst),
 		//#else
-			lst,
+		lst,
 		//#endif
-			[&](int i)
-			{
-				return tmp[i];
-			}
-		);
-		printf("\n");
-		for (uint i = 33; i < 33; i++)
+		[&](int i)
 		{
-			printf("%f %f %f; ", lst[i][0], lst[i][1], lst[i][2]);
+			return tmp[i];
 		}
-		for (uint i = 0; i < sortIndices.size(); i++)
-		{
-			const uint idx = sortIndices[i];
-			invSortIndices.at(idx) = i;
-			lst[i] = tmp[idx];
-		}
-		printf("\n\n\n");
-		for (uint i = 33; i < 33; i++)
-		{
-			printf("%f %f %f; ", lst[i][0], lst[i][1], lst[i][2]);
-		}
-	}
+	);
+}
 
 
 }

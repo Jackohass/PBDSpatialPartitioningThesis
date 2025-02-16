@@ -7,6 +7,9 @@
 //#define USE_DOUBLE
 #define MIN_PARALLEL_SIZE 64
 
+#define THRUST_IGNORE_CUB_VERSION_CHECK
+#define THRUST_CPP11_REQUIRED_NO_ERROR
+
 //#ifndef USE_DOUBLE
 //typedef double Real;
 //

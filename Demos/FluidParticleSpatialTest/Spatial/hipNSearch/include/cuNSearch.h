@@ -181,6 +181,8 @@ namespace cuNSearch
 			return m_activation_table.is_active(i, j);
 		}
 
+		void sort(PointSet& pointSet);
+
 	private:
 		bool isInitialized = false;
 		Real searchRadius;
