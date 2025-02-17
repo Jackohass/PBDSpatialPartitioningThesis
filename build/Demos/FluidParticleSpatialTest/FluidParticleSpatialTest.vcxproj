@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>HIP_clang</PlatformToolset>
+    <PlatformToolset>HIP nvcc 5.7</PlatformToolset>
     <UseDebugLibraries>true</UseDebugLibraries>
     <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
@@ -33,11 +33,11 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>HIP_clang</PlatformToolset>
+    <PlatformToolset>HIP nvcc 5.7</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Condition="'$(PlatformToolset)'=='HIP_clang'" Project="$(VCTargetsPath)\AMD.HIP.Clang.Common.props" />
+    <Import Condition="'$(PlatformToolset)'=='HIP nvcc 5.7'" Project="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Microsoft\VC\v160\Platforms\x64\PlatformToolsets\HIP nvcc 5.7\AMD.HIP.Nvcc.Common.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -211,26 +211,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\cuda_call_check.h.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\cuda_math.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model.cu.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model.h.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model_reader.cpp.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model_reader.h.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\prefix_sum.cu.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\scan.cu.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\scan.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\scan_kern.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_arrangement.cu.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_arrangement.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_kernel.cu.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_kernel.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_kernel_shared_data.cuh.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_parameter.h.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_particle.cpp.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_particle.h.hip" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_utils.cuh.hip" />
     <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\main.cpp" />
     <ClCompile Include="..\..\..\Demos\Common\LogWindow.cpp" />
     <ClInclude Include="..\..\..\Demos\Common\LogWindow.h" />
@@ -240,15 +220,15 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="..\..\..\Demos\Common\imguiParameters.h" />
     <ClCompile Include="..\..\..\Demos\Common\DemoBase.cpp" />
     <ClInclude Include="..\..\..\Demos\Common\DemoBase.h" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\Spatial_FSPH.cpp" />
     <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\Spatial_hipNSearch.cpp" />
     <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\TimeStepFluidModel.cpp" />
     <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\hipNSearch\cuNSearch.h" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\Spatial_FSPH.h" />
     <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\Spatial_hipNSearch.h" />
     <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\TimeStepFluidModel.h" />
     <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\FluidModel.cpp" />
     <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\FluidModel.h" />
-    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\Spatial_FSPH.cpp" />
-    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\Spatial_FSPH.h" />
     <ClInclude Include="..\..\..\Demos\Visualization\MiniGL.h" />
     <ClInclude Include="..\..\..\Demos\Visualization\Selection.h" />
     <ClInclude Include="..\..\..\Demos\Visualization\Shader.h" />
@@ -257,10 +237,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="..\..\..\Demos\Visualization\MiniGL.cpp" />
     <ClCompile Include="..\..\..\Demos\Visualization\Shader.cpp" />
     <ClInclude Include="..\..\..\Common\Common.h" />
-    <ClCompile Include="D:\projects\master_thesis\code\PBDSpatialPartitioningThesis\Demos\Visualization\Shader.cpp" />
-    <ClInclude Include="D:\projects\master_thesis\code\PBDSpatialPartitioningThesis\Common\Common.h" />
-    <ClCompile Include="D:\projects\master_thesis\code\PBDSpatialPartitioningThesis\Demos\Visualization\Shader.cpp" />
-    <ClInclude Include="D:\projects\master_thesis\code\PBDSpatialPartitioningThesis\Common\Common.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\projects\thesis\code\PBDSpatialPartitioningThesis\build\ZERO_CHECK.vcxproj">
@@ -301,6 +277,28 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{FABF64DA-0A67-3E01-8989-0641381A3F09}</Project>
       <Name>imgui</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\cuda_call_check.h.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\cuda_math.cuh.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model.cu.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model.cuh.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model.h.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model_reader.cpp.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\gpu_model_reader.h.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\prefix_sum.cu.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\scan.cu.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\scan.cuh.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\scan_kern.cuh.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_arrangement.cu.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_arrangement.cuh.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_kernel.cu.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_kernel.cuh.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_kernel_shared_data.cuh.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_parameter.h.hip" />
+    <ClCompile Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_particle.cpp.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_particle.h.hip" />
+    <ClInclude Include="..\..\..\Demos\FluidParticleSpatialTest\Spatial\FSPH\sph_utils.cuh.hip" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,7 +15,7 @@
 #include <thrust/execution_policy.h>
 #include <numeric>
 
-#include "Common/Common.h"
+//#include "Common/Common.h"
 #include "Utils/Timing.h"
 
 namespace sph

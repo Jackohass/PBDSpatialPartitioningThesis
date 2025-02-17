@@ -45,8 +45,8 @@ void Spatial_hipNSearch::addParticles(const unsigned int numParticles, Vector3r*
 	particles.insert(particles.begin(), numParticles, Vector3r(0.0f, 0.0f, 0.0f));
 	particles.insert(particles.begin() + numParticles, boundryX, boundryX + numBoundry);
 	particleIndex = hipNSearch.add_point_set(particles[0].data(), particles.size(), true, true);
-	//nSearch.find_neighbors();
-	//nSearch.point_set(particleIndex).makeInv();
+	//hipNSearch.find_neighbors();
+	//hipNSearch.point_set(particleIndex).makeInv();
 	
 }
 
@@ -54,8 +54,8 @@ void Spatial_hipNSearch::addBoundry(Vector3r* x, const unsigned int numParticles
 {
 	particles.insert(particles.begin(), x, x + numParticles);
 	boundryIndex = hipNSearch.add_point_set(particles[0].data(), particles.size(), true, true);
-	//nSearch.find_neighbors();
-	//nSearch.point_set(boundryIndex).makeInv();
+	//hipNSearch.find_neighbors();
+	//hipNSearch.point_set(boundryIndex).makeInv();
 	//printf("AH\n");
 	//assert(particles.size() == numberOfParticles);
 }
@@ -88,14 +88,14 @@ void Spatial_hipNSearch::neighborhoodSearchBoundry(Vector3r* x, const unsigned i
 {
 	std::copy(x, x + numParticles, particles.begin()); //particles.insert(particles.begin(), x, x + numParticles);
 	//const float* tmp0 = particles[0].data();
-	//const unsigned int* tmp0 = nSearch.point_set(boundryIndex).sortIndices.data();
-	//nSearch.sort(nSearch.point_set(boundryIndex));
-	//nSearch.point_set(boundryIndex).makeInverse();
-	//const float* tmp1 = nSearch.point_set(boundryIndex).GetPoints();
-	//const unsigned int* tmp1 = nSearch.point_set(boundryIndex).sortIndices.data();
+	//const unsigned int* tmp0 = hipNSearch.point_set(boundryIndex).sortIndices.data();
+	//hipNSearch.sort(hipNSearch.point_set(boundryIndex));
+	//hipNSearch.point_set(boundryIndex).makeInverse();
+	//const float* tmp1 = hipNSearch.point_set(boundryIndex).GetPoints();
+	//const unsigned int* tmp1 = hipNSearch.point_set(boundryIndex).sortIndices.data();
 	hipNSearch.find_neighbors(true);
-	//const float* tmp2 = nSearch.point_set(boundryIndex).GetPoints();
-	//const unsigned int* tmp2= nSearch.point_set(boundryIndex).sortIndices.data();
+	//const float* tmp2 = hipNSearch.point_set(boundryIndex).GetPoints();
+	//const unsigned int* tmp2= hipNSearch.point_set(boundryIndex).sortIndices.data();
 	//int i = 0;
 	//assert(particles.size() == numberOfParticles);
 }

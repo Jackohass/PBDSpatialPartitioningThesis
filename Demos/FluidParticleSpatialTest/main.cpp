@@ -71,7 +71,7 @@ string exePath;
 string dataPath;
 
 std::ofstream Utilities::graphingData;
-string dataFilename = "D:\\projects\\master_thesis\\code\\PBDSpatialPartitioningThesis\\bin\\output\\Fluid demo\\log\\graphingData";
+string dataFilename = "C:\\projects\\thesis\\code\\PBDSpatialPartitioningThesis\\bin\\output\\Fluid demo\\log\\graphingData";
 
 // main 
 int main(int argc, char** argv)
