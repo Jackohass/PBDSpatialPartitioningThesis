@@ -417,7 +417,7 @@ void computeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBuffe
 #endif // TAKETIME
 
 #ifdef TAKETIME
-    START_TIMING("Full count array and resize neighbour array");
+    START_TIMING("Fill count array and resize neighbour array");
 #endif // TAKETIME
     neigh->dNeighborCounts.resize(neigh->particleCount);
 

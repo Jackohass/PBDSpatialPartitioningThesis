@@ -4,12 +4,9 @@
 
 using namespace std;
 
-int main()
+void runTests(string version, string input)
 {
-    cout << "Write filename addition: ";
-    string input;
-    cin >> input;
-    string defaultCommand =  ".\\FluidParticleSpatialTest.exe";
+    string defaultCommand =  ".\\FluidParticleSpatialTest" + version + ".exe";
     string command = defaultCommand + " d" + " DefaultNum"+input;
     cout << "Currently doing: default" << endl;
     system(command.c_str());
@@ -21,6 +18,17 @@ int main()
         command = defaultCommand + " " + num + " " + num+ "Num"+input;
         system(command.c_str());
     }
+}
+
+int main()
+{
+    cout << "Write filename addition: ";
+    string input;
+    cin >> input;
+
+    runTests("Default", input);
+    runTests("FSPH", input);
+    runTests("hipNSearch", input);
 
     return 0;
 }
