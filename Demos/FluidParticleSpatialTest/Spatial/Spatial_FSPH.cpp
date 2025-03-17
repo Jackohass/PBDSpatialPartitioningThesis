@@ -4,6 +4,8 @@
 #include <thrust/execution_policy.h>
 #include <numeric>
 
+#include<iostream>
+
 #undef max
 #undef min
 #define NOMINMAX
@@ -12,6 +14,38 @@ using namespace PBD;
 
 Spatial_FSPH::Spatial_FSPH(const Real radius, const unsigned int numBoundry, const unsigned int numParticles)
 {
+	hipDeviceProp_t devProp;
+	hipGetDeviceProperties(&devProp, 0);
+	std::cout << "Name: " << devProp.name << std::endl;
+	std::cout << "Total global memory: " << devProp.totalGlobalMem << std::endl;
+	std::cout << "regsPerBlock: " << devProp.totalConstMem << std::endl;
+	std::cout << "sharedMemPerBlock: " << devProp.sharedMemPerBlock << std::endl;
+	std::cout << "regsPerBlock: " << devProp.regsPerBlock << std::endl;
+	std::cout << "warpSize: " << devProp.warpSize << std::endl;
+	std::cout << "maxThreadsPerBlock: " << devProp.maxThreadsPerBlock << std::endl;
+	std::cout << "maxThreadsDim x: " << devProp.maxThreadsDim[0] << std::endl;
+	std::cout << "maxThreadsDim y: " << devProp.maxThreadsDim[1] << std::endl;
+	std::cout << "maxThreadsDim z: " << devProp.maxThreadsDim[2] << std::endl;
+	std::cout << "maxGridSize x: " << devProp.maxGridSize[0] << std::endl;
+	std::cout << "maxGridSize y: " << devProp.maxGridSize[1] << std::endl;
+	std::cout << "maxGridSize z: " << devProp.maxGridSize[2] << std::endl;
+	std::cout << "multiProcessorCount: " << devProp.multiProcessorCount << std::endl;
+	std::cout << "canMapHostMemory: " << devProp.canMapHostMemory << std::endl;
+	std::cout << "concurrentKernels: " << devProp.concurrentKernels << std::endl;
+	//std::cout << "asyncEngineCount: " << devProp.asyncEngineCount << std::endl;
+	std::cout << "maxThreadsPerMultiProcessor: " << devProp.maxThreadsPerMultiProcessor << std::endl;
+	//std::cout << "sharedMemPerMultiprocessor: " << devProp.sharedMemPerMultiprocessor << std::endl;
+	//std::cout << "regsPerMultiprocessor: " << devProp.regsPerMultiprocessor << std::endl;
+	std::cout << "managedMemory: " << devProp.managedMemory << std::endl;
+	//std::cout << "hostNativeAtomicSupported: " << devProp.hostNativeAtomicSupported << std::endl;
+	std::cout << "pageableMemoryAccess: " << devProp.pageableMemoryAccess << std::endl;
+	std::cout << "pageableMemoryAccessUsesHostPageTables: " << devProp.pageableMemoryAccessUsesHostPageTables << std::endl;
+	//std::cout << "maxBlocksPerMultiProcessor: " << devProp.maxBlocksPerMultiProcessor << std::endl;
+	std::cout << "maxSharedMemoryPerMultiProcessor: " << devProp.maxSharedMemoryPerMultiProcessor << std::endl;
+
+	
+
+
 	nump_ = numBoundry+numParticles;
 	buff_capacity_ = nump_;
 	device_buff_.allocate(buff_capacity_, sph::kBuffTypeDevice);
@@ -28,10 +62,10 @@ Spatial_FSPH::Spatial_FSPH(const Real radius, const unsigned int numBoundry, con
 		(ushort)ceil((containerHeight + 0.01f) / sysPara.cell_size),
 		(ushort)ceil((containerDepth + 0.01f) / sysPara.cell_size)
 	);
-	
+#ifndef CPUCACHEOPT
 	CUDA_SAFE_CALL(hipHostMalloc(&part2Idx, nump_ * sizeof(int)));// * 64)); //Increase allocation size to force hip to actually allocate. What the hell HIP?
 	CUDA_SAFE_CALL(hipHostMalloc(&idx2Part, nump_ * sizeof(int)));// * 64)); //Increase allocation size to force hip to actually allocate. What the hell HIP?
-
+#endif
 	transSysParaToDevice(&sysPara);
 	
 	//BuffInit(device_buff_.get_buff_list(), nump_);
@@ -47,10 +81,12 @@ Spatial_FSPH::Spatial_FSPH(const Real radius, const unsigned int numBoundry, con
 
 Spatial_FSPH::~Spatial_FSPH()
 {
+#ifndef CPUCACHEOPT
 	hipHostFree(part2Idx);
 	hipHostFree(idx2Part);
 	part2Idx = nullptr;
 	idx2Part = nullptr;
+#endif
 	delete arrangement_;
 	delete neigh;
 	arrangement_ = nullptr;
@@ -99,13 +135,13 @@ void Spatial_FSPH::neighborhoodSearch(Vector3r* x)
 	host_buff_.get_buff_list().final_position[nump_] = position * 0.9;*/
 
 	host_buff_.transfer(device_buff_, 0, nump_, hipMemcpyHostToDevice);
-	printf("Host buffer transfer success\n");
+	//printf("Host buffer transfer success\n");
 
 	
 	float3 f0 = thrust::reduce(thrust::device, device_buff_.get_buff_list().position_d, device_buff_.get_buff_list().position_d + nump_);
-	printf("GPU sum: (%f,%f,%f)\n", f0.x, f0.y, f0.z);
+	//printf("GPU sum: (%f,%f,%f)\n", f0.x, f0.y, f0.z);
 	Vector3r f1 = std::accumulate(x, x + nump_, Vector3r(0.0f, 0.0f, 0.0f));
-	printf("CPU sum: (%f,%f,%f)\n", f1[0], f1[1], f1[2]);
+	//printf("CPU sum: (%f,%f,%f)\n", f1[0], f1[1], f1[2]);
 
 	int* d_index = arrangement_->getDevCellIndex();
 	int* offset_data = arrangement_->getDevOffsetData();
@@ -115,24 +151,40 @@ void Spatial_FSPH::neighborhoodSearch(Vector3r* x)
 	int middle = nump_;
 
 	middle = arrangement_->arrangeHybridMode9M();
-	printf("Arranged HybridMode success\n");
+	//printf("Arranged HybridMode success\n");
 
 	f0 = thrust::reduce(thrust::device, device_buff_.get_buff_list().position_d, device_buff_.get_buff_list().position_d + nump_);
-	printf("GPU sum: (%f,%f,%f)\n", f0.x, f0.y, f0.z);
+	//printf("GPU sum: (%f,%f,%f)\n", f0.x, f0.y, f0.z);
 	float3 f2 = std::accumulate(host_buff_.get_buff_list().position_d, host_buff_.get_buff_list().position_d + nump_, make_float3(0.0f, 0.0f, 0.0f));
-	printf("CPUHost sum: (%f,%f,%f)\n", f2.x, f2.y, f2.z);
+	//printf("CPUHost sum: (%f,%f,%f)\n", f2.x, f2.y, f2.z);
 	f1 = std::accumulate(x, x + nump_, Vector3r(0.0f, 0.0f, 0.0f));
-	printf("CPUx sum: (%f,%f,%f)\n", f1[0], f1[1], f1[2]);
+	//printf("CPUx sum: (%f,%f,%f)\n", f1[0], f1[1], f1[2]);
 
 	sph::ParticleIdxRange tra_range(0, middle);      // [0, middle)
-	printf("Gotten middle\n");
+	//printf("Gotten middle\n");
 
-	sph::computeNeighbours(cell_offsetM, tra_range, device_buff_.get_buff_list(), d_index, cell_offset, cell_nump, arrangement_->getBlockTasks(), arrangement_->getNumBlockSMSMode(), neigh);
-	printf("Computed neighbours\n");
+	sph::computeNeighbours(
+		cell_offsetM,
+		tra_range,
+		device_buff_.get_buff_list(),
+		d_index,
+		cell_offset,
+		cell_nump,
+		arrangement_->getBlockTasks(),
+		arrangement_->getNumBlockSMSMode(),
+#ifdef CPUCACHEOPT 
+		arrangement_->part2Idx,
+		arrangement_->idx2Part,
+#endif
+		neigh
+	);
+	//printf("Computed neighbours\n");
 
 	//CUDA_SAFE_CALL(hipMemcpy(host_buff_.get_buff_list().position_d, device_buff_.get_buff_list().position_d, nump_ * sizeof(float3), hipMemcpyDeviceToHost));
+#ifndef CPUCACHEOPT
 	CUDA_SAFE_CALL(hipMemcpy(part2Idx, arrangement_->part2Idx, nump_ * sizeof(int), hipMemcpyDeviceToHost));
 	CUDA_SAFE_CALL(hipMemcpy(idx2Part, arrangement_->idx2Part, nump_ * sizeof(int), hipMemcpyDeviceToHost));
+#endif
 }
 
 void Spatial_FSPH::neighborhoodSearch(Vector3r* x, const unsigned int numParticles, const unsigned int numBoundaryParticles, Vector3r* boundaryX)
@@ -186,9 +238,24 @@ void Spatial_FSPH::neighborhoodSearch(Vector3r* x, const unsigned int numParticl
 	sph::ParticleIdxRange tra_range(0, middle);      // [0, middle)
 	//printf("Gotten middle\n");
 
-	sph::computeNeighbours(cell_offsetM, tra_range, device_buff_.get_buff_list(), d_index, cell_offset, cell_nump, arrangement_->getBlockTasks(), arrangement_->getNumBlockSMSMode(), neigh);
+	sph::computeNeighbours(
+		cell_offsetM,
+		tra_range,
+		device_buff_.get_buff_list(),
+		d_index,
+		cell_offset,
+		cell_nump,
+		arrangement_->getBlockTasks(),
+		arrangement_->getNumBlockSMSMode(),
+#ifdef CPUCACHEOPT 
+		arrangement_->part2Idx,
+		arrangement_->idx2Part,
+#endif
+		neigh
+	);
 	//printf("Computed neighbours\n");
 
+#ifndef CPUCACHEOPT
 #ifdef TAKETIME
 	START_TIMING("Copy sorting indexes to CPU");
 #endif // TAKETIME
@@ -198,4 +265,5 @@ void Spatial_FSPH::neighborhoodSearch(Vector3r* x, const unsigned int numParticl
 #ifdef TAKETIME
 	STOP_TIMING_AVG;
 #endif // TAKETIME	
+#endif
 }

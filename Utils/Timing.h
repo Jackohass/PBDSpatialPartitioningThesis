@@ -12,6 +12,7 @@
 #include <iomanip>
 
 #define TAKETIME
+//#define MINIMUMTIMING
 
 namespace Utilities
 {

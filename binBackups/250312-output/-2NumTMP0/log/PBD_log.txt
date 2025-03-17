@@ -1,0 +1,23 @@
+[2025-03-12 15:58:40] Debug:   Git refspec: refs/heads/master
+[2025-03-12 15:58:40] Debug:   Git SHA1:    af02d55442e2400b6d02027cba0ade4be156ceea
+[2025-03-12 15:58:40] Debug:   Git status:  DIRTY
+[2025-03-12 15:58:40] Debug:   Host name:   BETTAN
+[2025-03-12 15:58:40] Info:    PositionBasedDynamics 2.2.0
+[2025-03-12 15:58:41] Info:    OpenGL version 4.6
+[2025-03-12 15:58:41] Info:    Vendor: ATI Technologies Inc.
+[2025-03-12 15:58:41] Info:    Renderer: AMD Radeon RX 7900 XTX
+[2025-03-12 15:58:41] Info:    Version: 4.6.0 Compatibility Profile Context 24.2.1.240215
+[2025-03-12 15:58:41] Info:    Initialize fluid particles
+[2025-03-12 15:58:41] Info:    Number of particles: 8100
+[2025-03-12 15:58:47] Info:    Average time neighborhood search with 513 calls: 1.51923 ms
+[2025-03-12 15:58:47] Info:    Average time constraint projection with 513 calls: 7.56971 ms
+[2025-03-12 15:58:47] Info:    Average time XSPH viscosity computation with 513 calls: 0.954726 ms
+[2025-03-12 15:58:47] Info:    Average time SimStep with 513 calls: 10.1772 ms
+[2025-03-12 15:58:47] Info:    ---------------------------------------------------------------------------
+
+[2025-03-12 15:58:53] Info:    Average time neighborhood search with 513 calls: 2.05597 ms
+[2025-03-12 15:58:53] Info:    Average time constraint projection with 513 calls: 8.21017 ms
+[2025-03-12 15:58:53] Info:    Average time XSPH viscosity computation with 513 calls: 1.03285 ms
+[2025-03-12 15:58:53] Info:    Average time SimStep with 513 calls: 11.4318 ms
+[2025-03-12 15:58:53] Info:    ---------------------------------------------------------------------------
+

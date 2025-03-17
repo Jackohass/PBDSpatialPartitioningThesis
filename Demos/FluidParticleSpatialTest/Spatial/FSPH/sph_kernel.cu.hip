@@ -400,7 +400,51 @@ void kncomputeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBuf
     }
 }
 
-void computeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBufferList buff_list_n, int* cindex, int* cell_offset, int* cell_num, BlockTask* block_task, int num_block, Neighbours* neigh) 
+#ifdef CPUCACHEOPT
+__global__
+void setInverseIndexCounts(int numParticles, int* neighboursOffset, int* neighborCounts, int* neighboursOffsetTemp, int* neighborCountsTemp, int* i2p)
+{
+    const int id = __umul24(blockDim.x, blockIdx.x) + threadIdx.x;
+    if (id < numParticles)
+    {
+        const int sortIndex = i2p[id];
+        neighborCountsTemp[id] = neighborCounts[sortIndex];
+        neighboursOffsetTemp[id] = neighboursOffset[sortIndex];;
+    }
+}
+
+__global__
+void inverseParticleIndexes(int numParticles, int* neighbours, int* neighboursTemp, int* neighboursOffsetTemp, int* neighborCountsTemp, int* p2i)
+{
+    const int id = __umul24(blockDim.x, blockIdx.x) + threadIdx.x;
+    if (id < numParticles)
+    {
+        const int cell_num = neighborCountsTemp[id];
+        if (0 == cell_num) return;
+        const int cell_offset = neighboursOffsetTemp[id];
+        const int end_idx = cell_offset + cell_num;
+        for (size_t i = cell_offset; i < end_idx; ++i)
+        {
+            neighboursTemp[i] = p2i[neighbours[i]];
+        }
+    }
+}
+#endif
+
+void computeNeighbours(
+    int* cell_offset_M, 
+    ParticleIdxRange range,
+    ParticleBufferList buff_list_n, 
+    int* cindex, int* cell_offset, 
+    int* cell_num, 
+    BlockTask* block_task, 
+    int num_block, 
+#ifdef CPUCACHEOPT 
+    int* dPart2Index,
+    int* dIndex2Part,
+#endif
+    Neighbours* neigh
+)
 {
     int total_thread = range.end - range.begin;
     int num_thread = 64;
@@ -480,6 +524,7 @@ void computeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBuffe
     STOP_TIMING_AVG;
 #endif // TAKETIME
 
+#ifndef CPUCACHEOPT
 #ifdef TAKETIME
     START_TIMING("Count GPU to CPU");
 #endif // TAKETIME
@@ -489,6 +534,30 @@ void computeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBuffe
 #ifdef TAKETIME
     STOP_TIMING_AVG;
 #endif // TAKETIME
+#endif
+#ifdef CPUCACHEOPT
+#ifdef TAKETIME
+    START_TIMING("Set inverse offsets and counts");
+#endif // TAKETIME
+    int num_threadR = 256;
+    int num_blockR = ceil_int(neigh->particleCount, num_threadR);
+    neigh->dTempNeighborCounts.resize(neigh->particleCount);
+    neigh->dTempNeighborOffsets.resize(neigh->particleCount);
+    //CUDA_SAFE_CALL(hipDeviceSynchronize());
+    setInverseIndexCounts <<<num_blockR, num_threadR>>> (
+        neigh->particleCount,
+        thrust::raw_pointer_cast(&neigh->dNeighborOffsets[0]),
+        thrust::raw_pointer_cast(&neigh->dNeighborCounts[0]),
+        thrust::raw_pointer_cast(&neigh->dTempNeighborOffsets[0]),
+        thrust::raw_pointer_cast(&neigh->dTempNeighborCounts[0]),
+        dIndex2Part
+    );
+    //CUDA_SAFE_CALL(hipDeviceSynchronize());
+#ifdef TAKETIME
+    CUDA_SAFE_CALL(hipDeviceSynchronize());
+    STOP_TIMING_AVG;
+#endif // TAKETIME
+#endif
 
 #ifdef TAKETIME
     START_TIMING("Execute kncomputeNeighbours");
@@ -519,15 +588,72 @@ void computeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBuffe
 #endif // TAKETIME
     //printf("Number of GPU Neighbours: %d\n", totalNeighborCount);
 
+#ifndef CPUCACHEOPT 
     //Return host arrays neighbours per particle, number of neighbours per particle, offset for each particle
 #ifdef TAKETIME
     START_TIMING("Copy neighbour & offset to CPU");
 #endif // TAKETIME
+#endif
+
+#ifdef CPUCACHEOPT 
+#ifdef TAKETIME
+    START_TIMING("Inverse particle indexes");
+#endif // TAKETIME
+    neigh->dTempNeighbors.resize(totalNeighborCount);
+    //CUDA_SAFE_CALL(hipDeviceSynchronize());
+    inverseParticleIndexes <<<num_blockR, num_threadR>>> (
+        neigh->particleCount,
+        thrust::raw_pointer_cast(&neigh->dNeighbors[0]),
+        thrust::raw_pointer_cast(&neigh->dTempNeighbors[0]),
+        thrust::raw_pointer_cast(&neigh->dTempNeighborOffsets[0]),
+        thrust::raw_pointer_cast(&neigh->dTempNeighborCounts[0]),
+        dPart2Index
+    );
+    //CUDA_SAFE_CALL(hipDeviceSynchronize());
+#ifdef TAKETIME
+    CUDA_SAFE_CALL(hipDeviceSynchronize());
+    STOP_TIMING_AVG;
+#endif // TAKETIME
+#ifdef TAKETIME
+    START_TIMING("Copy neighbour data to CPU");
+#endif // TAKETIME
+    CUDA_SAFE_CALL(hipMemcpy(neigh->neighbors, thrust::raw_pointer_cast(&neigh->dTempNeighbors[0]), sizeof(int) * totalNeighborCount, hipMemcpyDeviceToHost));
+    CUDA_SAFE_CALL(hipMemcpy(neigh->offsets, thrust::raw_pointer_cast(&neigh->dTempNeighborOffsets[0]), sizeof(int) * neigh->particleCount, hipMemcpyDeviceToHost));
+    CUDA_SAFE_CALL(hipMemcpy(neigh->counts, thrust::raw_pointer_cast(&neigh->dTempNeighborCounts[0]), sizeof(int) * neigh->particleCount, hipMemcpyDeviceToHost));
+#ifdef TAKETIME
+    STOP_TIMING_AVG;
+#endif // TAKETIME
+    //neigh->neighboursTemp.resize(totalNeighborCount);
+    //neigh->neighboursOffsetTemp.resize(neigh->particleCount);
+    //std::vector<int> part2Idx(neigh->particleCount);
+    //std::vector<int> idx2Part(neigh->particleCount);
+    //CUDA_SAFE_CALL(hipMemcpy(neigh->neighboursTemp.data(), thrust::raw_pointer_cast(&neigh->dNeighbors[0]), sizeof(int) * totalNeighborCount, hipMemcpyDeviceToHost));
+    //CUDA_SAFE_CALL(hipMemcpy(neigh->neighboursOffsetTemp.data(), thrust::raw_pointer_cast(&neigh->dNeighborOffsets[0]), sizeof(int) * neigh->particleCount, hipMemcpyDeviceToHost));
+    //CUDA_SAFE_CALL(hipMemcpy(part2Idx.data(), dPart2Index, neigh->particleCount * sizeof(int), hipMemcpyDeviceToHost));
+    //CUDA_SAFE_CALL(hipMemcpy(idx2Part.data(), dIndex2Part, neigh->particleCount * sizeof(int), hipMemcpyDeviceToHost));
+    //for (int id = 0; id < neigh->particleCount; id++)
+    //{
+    //    const int sortIndex = idx2Part[id];
+    //    const int cell_num = neigh->neighborCountsTemp[sortIndex];
+    //    //if (0 == cell_num) return;
+    //    const int cell_offset = neigh->neighboursOffsetTemp[sortIndex];
+    //    const int end_idx = cell_offset + cell_num;
+    //    neigh->offsets[id] = cell_offset;
+    //    neigh->counts[id] = cell_num;
+    //    for (size_t i = cell_offset; i < end_idx; ++i)
+    //    {
+    //        neigh->neighbors[i] = part2Idx[neigh->neighboursTemp[i]];
+    //    }
+    //}
+    //printf("AAAAH\n");
+#endif
+#ifndef CPUCACHEOPT
     CUDA_SAFE_CALL(hipMemcpy(neigh->neighbors, thrust::raw_pointer_cast(&neigh->dNeighbors[0]), sizeof(int) * totalNeighborCount, hipMemcpyDeviceToHost));
     CUDA_SAFE_CALL(hipMemcpy(neigh->offsets, thrust::raw_pointer_cast(&neigh->dNeighborOffsets[0]), sizeof(int) * neigh->particleCount, hipMemcpyDeviceToHost));
 #ifdef TAKETIME
     STOP_TIMING_AVG;
 #endif // TAKETIME
+#endif
 
 #ifdef TAKETIME
     STOP_TIMING_AVG;

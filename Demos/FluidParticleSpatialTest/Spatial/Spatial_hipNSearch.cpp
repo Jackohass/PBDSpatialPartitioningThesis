@@ -44,7 +44,18 @@ void Spatial_hipNSearch::addParticles(const unsigned int numParticles, Vector3r*
 {
 	particles.insert(particles.begin(), numParticles, Vector3r(0.0f, 0.0f, 0.0f));
 	particles.insert(particles.begin() + numParticles, boundryX, boundryX + numBoundry);
-	particleIndex = hipNSearch.add_point_set(particles[0].data(), particles.size(), true, true);
+	particleIndex = hipNSearch.add_point_set(
+		particles[0].data(), 
+		particles.size(), 
+#ifdef STATICGRID
+		containerWidth + 0.01f,
+		containerHeight + 0.01f,
+		containerDepth + 0.01f,
+		hipNSearch.radius(),
+#endif
+		true, 
+		true
+	);
 	//nSearch.find_neighbors();
 	//nSearch.point_set(particleIndex).makeInv();
 	
@@ -53,7 +64,18 @@ void Spatial_hipNSearch::addParticles(const unsigned int numParticles, Vector3r*
 void Spatial_hipNSearch::addBoundry(Vector3r* x, const unsigned int numParticles)
 {
 	particles.insert(particles.begin(), x, x + numParticles);
-	boundryIndex = hipNSearch.add_point_set(particles[0].data(), particles.size(), true, true);
+	boundryIndex = hipNSearch.add_point_set(
+		particles[0].data(), 
+		particles.size(), 
+#ifdef STATICGRID
+		containerWidth + 0.01f,
+		containerHeight + 0.01f,
+		containerDepth + 0.01f,
+		hipNSearch.radius(),
+#endif
+		true, 
+		true
+	);
 	//nSearch.find_neighbors();
 	//nSearch.point_set(boundryIndex).makeInv();
 	//printf("AH\n");

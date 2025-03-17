@@ -347,7 +347,17 @@ void Arrangement::arrangeBlockTasksFixedM(int *hash, int *celloff, int *cellnum,
 
 int xixi = 0;
 
-__global__ void CountingSort_Result_M(int *p_offset_p, int *p_offset, int *hash, int *hash_new, int *cell_offset, int num, ParticleBufferList old_data, ParticleBufferList new_data, int* p2i, int* i2p)
+__global__ void CountingSort_Result_M(
+	int *p_offset_p, 
+	int *p_offset, 
+	int *hash, 
+	int *hash_new, 
+	int *cell_offset, 
+	int num, ParticleBufferList old_data, 
+	ParticleBufferList new_data, 
+	int* p2i,
+	int* i2p
+)
 {
 	int id = __umul24(blockDim.x, blockIdx.x) + threadIdx.x;
 	if (id < num)
@@ -389,6 +399,7 @@ __global__ void calculate_cell_info(int *cell_Numx, int *cell_Offset, int *cell_
 		cell_Offset[id] = cell_Offset_M[idi];
 	}
 }
+
 void Arrangement::CountingSort_O_M()
 {
 	/*float3 f0 = thrust::reduce(thrust::device, buff_list_.get_buff_list().position_d, buff_list_.get_buff_list().position_d + nump_);
@@ -419,7 +430,16 @@ void Arrangement::CountingSort_O_M()
 	/*f0 = thrust::reduce(thrust::device, buff_list_.get_buff_list().position_d, buff_list_.get_buff_list().position_d + nump_);
 	printf("exclusive_scan GPU sum: (%f,%f,%f)\n", f0.x, f0.y, f0.z);*/
 
-	CountingSort_Result_M <<<num_block, num_thread >>>(d_p_offset_p, d_p_offset_, d_hash_, hashp, d_cell_offset_M, nump_, buff_list_.get_buff_list(), buff_temp_.get_buff_list(), part2Idx, idx2Part);
+	CountingSort_Result_M <<<num_block, num_thread >>>(
+		d_p_offset_p, d_p_offset_, 
+		d_hash_, hashp, 
+		d_cell_offset_M, 
+		nump_, 
+		buff_list_.get_buff_list(), 
+		buff_temp_.get_buff_list(), 
+		part2Idx,
+		idx2Part
+	);
 	
 	/*f0 = thrust::reduce(thrust::device, buff_list_.get_buff_list().position_d, buff_list_.get_buff_list().position_d + nump_);
 	printf("CountingSort_Result_M GPU sum: (%f,%f,%f)\n", f0.x, f0.y, f0.z);

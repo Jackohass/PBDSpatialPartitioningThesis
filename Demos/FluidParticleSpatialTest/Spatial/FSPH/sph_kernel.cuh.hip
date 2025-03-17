@@ -21,6 +21,8 @@
 #include "sph_parameter.h.hip"
 #include "sph_particle.h.hip"
 
+#include<vector>
+
 class Neighbours
 {
 private:
@@ -38,6 +40,12 @@ public:
 	thrust::device_vector<int> dNeighbors;
 	thrust::device_vector<int> dNeighborCounts;
 	thrust::device_vector<int> dNeighborOffsets;
+	thrust::device_vector<int> dTempNeighbors;
+	thrust::device_vector<int> dTempNeighborCounts;
+	thrust::device_vector<int> dTempNeighborOffsets;
+	/*std::vector<int> neighboursTemp;
+	std::vector<int> neighboursOffsetTemp;
+	std::vector<int> neighborCountsTemp;*/
 
 	int particleCount;
 
@@ -120,7 +128,20 @@ void find_max_P(int blocks, int tds, sumGrad *id_value, int numbers);
 //void computeDensitySMS64(ParticleBufferList buff_list, int *cell_offset, int *cell_num, BlockTask *block_task, int num_block);
 //void computeDensityHybrid128n(int *cell_offset_M, ParticleIdxRange range, ParticleBufferList buff_list_n, int* cindex, int *cell_offset, int *cell_num, BlockTask *block_task, int num_block);
 
-void computeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBufferList buff_list_n, int* cindex, int* cell_offset, int* cell_num, BlockTask* block_task, int num_block, Neighbours* neigh);
+void computeNeighbours(
+	int* cell_offset_M,
+	ParticleIdxRange range,
+	ParticleBufferList buff_list_n,
+	int* cindex, int* cell_offset,
+	int* cell_num,
+	BlockTask* block_task,
+	int num_block,
+#ifdef CPUCACHEOPT 
+	int* dPart2Index,
+	int* dIndex2Part,
+#endif
+	Neighbours* neigh
+);
 
 //void computeForceHybrid128n(int *cell_offset_M, ParticleIdxRange range, ParticleBufferList buff_list_n, int* cindex, int *cell_offset, int *cell_num, BlockTask *block_task, int num_block);
 //

@@ -87,8 +87,17 @@ namespace cuNSearch
 		* @returns Returns unique identifier in form of an index assigned to the newly created point
 		* set.
 		*/
-		unsigned int add_point_set(Real const* x, std::size_t n, bool is_dynamic = true,
-			bool search_neighbors = true, bool find_neighbors = true, void *user_data = nullptr);
+		unsigned int add_point_set(
+			Real const* x, 
+			std::size_t n, 
+#ifdef STATICGRID
+			Real max_x, Real max_y, Real max_z, Real m_SearchRadius,
+#endif
+			bool is_dynamic = true,
+			bool search_neighbors = true, 
+			bool find_neighbors = true, 
+			void *user_data = nullptr
+		);
 
 		/**
 		* Performs the actual query. This method will assign a list of neighboring points to each point

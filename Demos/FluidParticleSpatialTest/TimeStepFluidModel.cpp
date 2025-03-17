@@ -47,7 +47,7 @@ void TimeStepFluidModel::step(FluidModel &model)
 	}
 
 	// Perform neighborhood search
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 	START_TIMING("neighborhood search");
 #endif // TAKETIME
 #if defined(FSPH)
@@ -62,7 +62,7 @@ void TimeStepFluidModel::step(FluidModel &model)
 	model.getNeighborhoodSearch()->neighborhoodSearch(&model.getParticles().getPosition(0), model.numBoundaryParticles(), &model.getBoundaryX(0));
 
 #endif
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 	STOP_TIMING_AVG;
 #endif // TAKETIME
 

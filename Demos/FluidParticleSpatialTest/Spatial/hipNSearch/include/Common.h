@@ -1,6 +1,8 @@
 #pragma once
 // This is a public header. Avoid references to cuda or other external references.
 
+#define STATICGRID
+
 namespace cuNSearch
 {
 	typedef unsigned long long ulong;

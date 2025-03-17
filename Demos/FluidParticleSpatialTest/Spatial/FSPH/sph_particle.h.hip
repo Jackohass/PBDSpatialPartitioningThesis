@@ -12,6 +12,8 @@
 //#include <windows.h>
 #include "cuda_call_check.h.hip"
 
+#define CPUCACHEOPT
+
 typedef unsigned int uint;
 
 namespace sph

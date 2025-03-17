@@ -68,6 +68,7 @@ public:
 	void CountingSortCUDA_Two9_M();
 	int arrangeHybridMode9M();
 
+
     int* part2Idx;
     int* idx2Part;
 

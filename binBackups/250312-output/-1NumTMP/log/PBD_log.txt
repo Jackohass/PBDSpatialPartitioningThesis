@@ -1,0 +1,29 @@
+[2025-03-12 15:54:33] Debug:   Git refspec: refs/heads/master
+[2025-03-12 15:54:33] Debug:   Git SHA1:    af02d55442e2400b6d02027cba0ade4be156ceea
+[2025-03-12 15:54:33] Debug:   Git status:  DIRTY
+[2025-03-12 15:54:33] Debug:   Host name:   BETTAN
+[2025-03-12 15:54:33] Info:    PositionBasedDynamics 2.2.0
+[2025-03-12 15:54:34] Info:    OpenGL version 4.6
+[2025-03-12 15:54:34] Info:    Vendor: ATI Technologies Inc.
+[2025-03-12 15:54:34] Info:    Renderer: AMD Radeon RX 7900 XTX
+[2025-03-12 15:54:34] Info:    Version: 4.6.0 Compatibility Profile Context 24.2.1.240215
+[2025-03-12 15:54:34] Info:    Initialize fluid particles
+[2025-03-12 15:54:34] Info:    Number of particles: 14520
+[2025-03-12 15:54:43] Info:    Average time neighborhood search with 513 calls: 2.69955 ms
+[2025-03-12 15:54:43] Info:    Average time constraint projection with 513 calls: 11.1877 ms
+[2025-03-12 15:54:43] Info:    Average time XSPH viscosity computation with 513 calls: 1.44572 ms
+[2025-03-12 15:54:43] Info:    Average time SimStep with 513 calls: 15.5523 ms
+[2025-03-12 15:54:43] Info:    ---------------------------------------------------------------------------
+
+[2025-03-12 15:54:44] Info:    Average time neighborhood search with 73 calls: 2.40655 ms
+[2025-03-12 15:54:44] Info:    Average time constraint projection with 73 calls: 7.64874 ms
+[2025-03-12 15:54:44] Info:    Average time XSPH viscosity computation with 73 calls: 1.05166 ms
+[2025-03-12 15:54:44] Info:    Average time SimStep with 73 calls: 11.3257 ms
+[2025-03-12 15:54:44] Info:    ---------------------------------------------------------------------------
+
+[2025-03-12 15:54:44] Info:    Time sum neighborhood search: 175.678 ms
+[2025-03-12 15:54:44] Info:    Time sum constraint projection: 558.358 ms
+[2025-03-12 15:54:44] Info:    Time sum XSPH viscosity computation: 76.7713 ms
+[2025-03-12 15:54:44] Info:    Time sum SimStep: 826.777 ms
+[2025-03-12 15:54:44] Info:    ---------------------------------------------------------------------------
+

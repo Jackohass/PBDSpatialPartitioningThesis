@@ -94,6 +94,12 @@ int main(int argc, char** argv)
 			depth = 15;
 			height = 20;
 		}
+		else if (argv[1][0] == 'm')
+		{
+			width = 91;
+			depth = 91;
+			height = 122;
+		}
 		else
 		{
 			int shift = stoi(argv[1]); //Make into an int
@@ -119,7 +125,7 @@ int main(int argc, char** argv)
 		dataFilename += string(argv[2]);
 	}
 
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 	Utilities::graphingData.open(dataFilename + ".csv", std::ios::out);
 	if (Utilities::graphingData.fail())
 		std::cerr << "Failed to open file: graphingData.csv\n";
@@ -169,7 +175,7 @@ int main(int argc, char** argv)
 
 	MiniGL::mainLoop();
 
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 	Utilities::graphingData.close();
 #endif // TAKETIME
 
@@ -232,7 +238,7 @@ void selection(const Vector2i &start, const Vector2i &end, void *clientData)
 	MiniGL::unproject(end[0], end[1], oldMousePos);
 }
 
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 int numberOfTimeSteps = 0;
 int numResets = 0;
 #define STOPATTIMESTEP 512
@@ -244,7 +250,7 @@ void timeStep ()
 	if ((pauseAt > 0.0) && (pauseAt < TimeManager::getCurrent()->getTime()))
 		base->setValue(DemoBase::PAUSE, true);*/
 
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 	if (numberOfTimeSteps == STOPATTIMESTEP)
 	{
 		if (numResets < RESETNUM)
@@ -276,7 +282,7 @@ void timeStep ()
 	const unsigned int numSteps = base->getValue<unsigned int>(DemoBase::NUM_STEPS_PER_RENDER);
 	for (unsigned int i = 0; i < numSteps; i++)
 	{
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 		graphingData << numberOfTimeSteps << ",";
 		//if (numberOfTimeSteps == 0) graphingData << "0,0,0,0,";
 		START_TIMING("SimStep");
@@ -284,7 +290,7 @@ void timeStep ()
 
 		simulation.step(model);
 
-#ifdef TAKETIME
+#if defined(TAKETIME) || defined(MINIMUMTIMING)
 		STOP_TIMING_AVG;
 		graphingData << "\n";
 		numberOfTimeSteps++;

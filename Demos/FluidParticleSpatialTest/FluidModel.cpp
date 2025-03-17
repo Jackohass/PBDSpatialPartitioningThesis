@@ -240,140 +240,140 @@ void FluidModel::initModel(const unsigned int nFluidParticles, Vector3r* fluidPa
 	}*/
 	printf("\n");
 
-	printf("Testing pressure:\n");
-	int county = 0;
-	std::vector<unsigned int> tmpCPU;
-	tmpCPU.reserve(50);
-	std::vector<unsigned int> tmpGPU;
-	tmpGPU.reserve(50);
-	std::vector<unsigned int> difference;
-	difference.reserve(50);
+	//printf("Testing pressure:\n");
+	//int county = 0;
+	//std::vector<unsigned int> tmpCPU;
+	//tmpCPU.reserve(50);
+	//std::vector<unsigned int> tmpGPU;
+	//tmpGPU.reserve(50);
+	//std::vector<unsigned int> difference;
+	//difference.reserve(50);
 
-	std::set<unsigned int> missingParticles;
-	std::vector<unsigned int> wrongParticles;
-	std::set<unsigned int> foundParticles;
-	wrongParticles.reserve(1408);
-	bool same = true;
-	for (int i = 0; i < (int)nBoundaryParticles; i++)
-	{
-		bool subSame = true;
-		int sortIdx = neighborhoodSearchSH.partIdx(i);
-		Real diff = m_boundaryPsi[i] - testBoundPsi[i];
-		if (diff > 0.000001 || neighborhoodSearchSH.n_neighbors(sortIdx) != numNeighbors[i])
-		{
-			wrongParticles.push_back(i);
-			tmpCPU.clear();
-			tmpGPU.clear();
-			difference.clear();
-			//printf("## %d ##\n", i);
-			county++;
-			//printf("\t%f - %f = %f\n", m_boundaryPsi[i], testBoundPsi[i], diff);
+	//std::set<unsigned int> missingParticles;
+	//std::vector<unsigned int> wrongParticles;
+	//std::set<unsigned int> foundParticles;
+	//wrongParticles.reserve(1408);
+	//bool same = true;
+	//for (int i = 0; i < (int)nBoundaryParticles; i++)
+	//{
+	//	bool subSame = true;
+	//	int sortIdx = neighborhoodSearchSH.partIdx(i);
+	//	Real diff = m_boundaryPsi[i] - testBoundPsi[i];
+	//	if (diff > 0.000001 || neighborhoodSearchSH.n_neighbors(sortIdx) != numNeighbors[i])
+	//	{
+	//		wrongParticles.push_back(i);
+	//		tmpCPU.clear();
+	//		tmpGPU.clear();
+	//		difference.clear();
+	//		//printf("## %d ##\n", i);
+	//		county++;
+	//		//printf("\t%f - %f = %f\n", m_boundaryPsi[i], testBoundPsi[i], diff);
 
-			//printf("\tCPU (%d):", numNeighbors[i]);
-			for (unsigned int j = 0; j < numNeighbors[i]; j++)
-			{
-				const unsigned int neighborIndex = neighbors[i][j];
-				tmpCPU.push_back(neighborIndex);
-				//printf("\t%d; ", neighborIndex);
-			}
-			std::sort(tmpCPU.begin(), tmpCPU.end());
-			//printf("\n");
+	//		//printf("\tCPU (%d):", numNeighbors[i]);
+	//		for (unsigned int j = 0; j < numNeighbors[i]; j++)
+	//		{
+	//			const unsigned int neighborIndex = neighbors[i][j];
+	//			tmpCPU.push_back(neighborIndex);
+	//			//printf("\t%d; ", neighborIndex);
+	//		}
+	//		std::sort(tmpCPU.begin(), tmpCPU.end());
+	//		//printf("\n");
 
-			const unsigned int sortIdx = neighborhoodSearchSH.partIdx(i);
-			//printf("\tGPU (%d): ", neighborhoodSearchSH.n_neighbors(sortIdx));
-			for (unsigned int j = 0; j < neighborhoodSearchSH.n_neighbors(sortIdx); j++)
-			{
-				const unsigned int neighborIndex = neighborhoodSearchSH.invNeighbor(sortIdx, j);
-				tmpGPU.push_back(neighborIndex);
-				foundParticles.insert(neighborIndex);
-				//printf("\t%d; ", neighborIndex);
-			}
-			std::sort(tmpGPU.begin(), tmpGPU.end());
-			//printf("\n");
+	//		const unsigned int sortIdx = neighborhoodSearchSH.partIdx(i);
+	//		//printf("\tGPU (%d): ", neighborhoodSearchSH.n_neighbors(sortIdx));
+	//		for (unsigned int j = 0; j < neighborhoodSearchSH.n_neighbors(sortIdx); j++)
+	//		{
+	//			const unsigned int neighborIndex = neighborhoodSearchSH.invNeighbor(sortIdx, j);
+	//			tmpGPU.push_back(neighborIndex);
+	//			foundParticles.insert(neighborIndex);
+	//			//printf("\t%d; ", neighborIndex);
+	//		}
+	//		std::sort(tmpGPU.begin(), tmpGPU.end());
+	//		//printf("\n");
 
-			
+	//		
 
-			std::set_difference(tmpGPU.begin(), tmpGPU.end(), tmpCPU.begin(), tmpCPU.end(),
-				std::inserter(difference, difference.begin()));
-			if (difference.size() > 0)
-			{
-				printf("## %d ##\n", i);
-				printf("\tDifference GPU/CPU (%d): ", difference.size());
-				for (unsigned int d : difference)
-				{
-					printf("\t%d; ", d);
-					if (m_boundaryX[i] != m_boundaryX[d]) subSame = false;
-					missingParticles.insert(d);
-				}
-				printf("\n");
-			}
+	//		std::set_difference(tmpGPU.begin(), tmpGPU.end(), tmpCPU.begin(), tmpCPU.end(),
+	//			std::inserter(difference, difference.begin()));
+	//		if (difference.size() > 0)
+	//		{
+	//			printf("## %d ##\n", i);
+	//			printf("\tDifference GPU/CPU (%d): ", difference.size());
+	//			for (unsigned int d : difference)
+	//			{
+	//				printf("\t%d; ", d);
+	//				if (m_boundaryX[i] != m_boundaryX[d]) subSame = false;
+	//				missingParticles.insert(d);
+	//			}
+	//			printf("\n");
+	//		}
 
-			difference.clear();
-			std::set_difference(tmpCPU.begin(), tmpCPU.end(), tmpGPU.begin(), tmpGPU.end(),
-				std::inserter(difference, difference.begin()));
-			if (difference.size() > 0)
-			{
-				printf("## %d ##\n", i);
-				printf("\tDifference CPU/GPU (%d): ", difference.size());
-				for (unsigned int d : difference)
-				{
-					printf("\t%d; ", d);
-					if (m_boundaryX[i] != m_boundaryX[d]) subSame = false;
-					missingParticles.insert(d);
-				}
-				printf("\n");
-			}
-			
-		}
-		if (!subSame) same = false;
-	}
+	//		difference.clear();
+	//		std::set_difference(tmpCPU.begin(), tmpCPU.end(), tmpGPU.begin(), tmpGPU.end(),
+	//			std::inserter(difference, difference.begin()));
+	//		if (difference.size() > 0)
+	//		{
+	//			printf("## %d ##\n", i);
+	//			printf("\tDifference CPU/GPU (%d): ", difference.size());
+	//			for (unsigned int d : difference)
+	//			{
+	//				printf("\t%d; ", d);
+	//				if (m_boundaryX[i] != m_boundaryX[d]) subSame = false;
+	//				missingParticles.insert(d);
+	//			}
+	//			printf("\n");
+	//		}
+	//		
+	//	}
+	//	if (!subSame) same = false;
+	//}
 
-	if (same) printf("They all have the same coordinates\n");
+	//if (same) printf("They all have the same coordinates\n");
 
-	{
-		printf("Number of wrongs %d/%d: \n", missingParticles.size(), county);
-		bool cursed = true;
-		int i = 0;
-		for (unsigned int part : missingParticles)
-		{
-			/*printf("%d, ", part);
-			if (part != wrongParticles[i]) cursed = false;*/
-			printf("%d (%f, %f, %f); ", part, m_boundaryX[part][0], m_boundaryX[part][1], m_boundaryX[part][2]);
-			i++;
-		}
-		if (cursed) printf("OH NO IT IS CURSED\n");
-		printf("\n");
-		difference.clear();
-		std::set_difference(missingParticles.begin(), missingParticles.end(), wrongParticles.begin(), wrongParticles.end(),
-			std::inserter(difference, difference.begin()));
-		printf("\tDifference of missing/wrong particles (%d): ", difference.size());
-		/*for (unsigned int d : difference)
-		{
-			printf("\t%d; ", d);
-		}*/
-		printf("\n");
+	//{
+	//	printf("Number of wrongs %d/%d: \n", missingParticles.size(), county);
+	//	bool cursed = true;
+	//	int i = 0;
+	//	for (unsigned int part : missingParticles)
+	//	{
+	//		/*printf("%d, ", part);
+	//		if (part != wrongParticles[i]) cursed = false;*/
+	//		printf("%d (%f, %f, %f); ", part, m_boundaryX[part][0], m_boundaryX[part][1], m_boundaryX[part][2]);
+	//		i++;
+	//	}
+	//	if (cursed) printf("OH NO IT IS CURSED\n");
+	//	printf("\n");
+	//	difference.clear();
+	//	std::set_difference(missingParticles.begin(), missingParticles.end(), wrongParticles.begin(), wrongParticles.end(),
+	//		std::inserter(difference, difference.begin()));
+	//	printf("\tDifference of missing/wrong particles (%d): ", difference.size());
+	//	/*for (unsigned int d : difference)
+	//	{
+	//		printf("\t%d; ", d);
+	//	}*/
+	//	printf("\n");
 
-		difference.clear();
-		std::set_difference(wrongParticles.begin(), wrongParticles.end(), missingParticles.begin(), missingParticles.end(),
-			std::inserter(difference, difference.begin()));
-		printf("\tDifference of wrong/missing particles (%d): ", difference.size());
-		/*for (unsigned int d : difference)
-		{
-			printf("\t%d; ", d);
-		}*/
-		printf("\n");
+	//	difference.clear();
+	//	std::set_difference(wrongParticles.begin(), wrongParticles.end(), missingParticles.begin(), missingParticles.end(),
+	//		std::inserter(difference, difference.begin()));
+	//	printf("\tDifference of wrong/missing particles (%d): ", difference.size());
+	//	/*for (unsigned int d : difference)
+	//	{
+	//		printf("\t%d; ", d);
+	//	}*/
+	//	printf("\n");
 
-		std::vector<unsigned int> intersection;
-		intersection.reserve(1500);
-		std::set_intersection(foundParticles.begin(), foundParticles.end(), missingParticles.begin(), missingParticles.end(),
-			std::inserter(intersection, intersection.begin()));
-		printf("Intersection (%d): ", intersection.size());
-		for (unsigned int intersec : intersection)
-		{
-			//printf("\t(%d, [%f, %f, %f]]\n); ", intersec, m_boundaryX[intersec][0], m_boundaryX[intersec][1], m_boundaryX[intersec][2]);
-		}
-	}
-	printf("\n");
+	//	std::vector<unsigned int> intersection;
+	//	intersection.reserve(1500);
+	//	std::set_intersection(foundParticles.begin(), foundParticles.end(), missingParticles.begin(), missingParticles.end(),
+	//		std::inserter(intersection, intersection.begin()));
+	//	printf("Intersection (%d): ", intersection.size());
+	//	for (unsigned int intersec : intersection)
+	//	{
+	//		//printf("\t(%d, [%f, %f, %f]]\n); ", intersec, m_boundaryX[intersec][0], m_boundaryX[intersec][1], m_boundaryX[intersec][2]);
+	//	}
+	//}
+	//printf("\n");
 
 	float cpuPsiSum = std::accumulate(testBoundPsi.begin(), testBoundPsi.end(), 0.0f);
 	printf("CPU pressure sum: %f\n", cpuPsiSum);

@@ -3,6 +3,8 @@
 #include "Common/Common.h"
 #include "Utils/Timing.h"
 
+#define STATICGRID
+
 #include "hipNSearch/cuNSearch.h"
 
 using Real3 = std::array<Real, 3>;
@@ -17,7 +19,9 @@ namespace PBD
 			numberOfParticles = numBoundry + numParticle;
 			particles.reserve(numberOfParticles);
 			printf("Real3: %d; Vector3r: %d\n", sizeof(Real3), sizeof(Vector3r));
+#ifdef TAKETIME
 			hipNSearch.setFileOutput(&Utilities::graphingData);
+#endif // TAKETIME
 		};
 		~Spatial_hipNSearch();
 
@@ -29,21 +33,21 @@ namespace PBD
 		void update();
 		//unsigned int** getNeighbors() const;
 		//unsigned int* getNumNeighbors() const;
-		const unsigned int getMaxNeighbors() const { return 0; } //TODO
+		FORCE_INLINE const unsigned int getMaxNeighbors() const { return 0; } //TODO
 
-		unsigned int getNumParticles() const;
+		FORCE_INLINE unsigned int getNumParticles() const;
 		void setRadius(const Real radius);
 		Real getRadius() const;
 
-		unsigned int n_neighbors(unsigned int i) const
+		FORCE_INLINE unsigned int n_neighbors(unsigned int i) const
 		{
 			return hipNSearch.point_set(particleIndex).n_neighbors(particleIndex, i);
 		}
-		unsigned int* neighbors(unsigned int i) const
+		FORCE_INLINE unsigned int* neighbors(unsigned int i) const
 		{
 			return hipNSearch.point_set(particleIndex).neighbor_list(particleIndex, i);
 		}
-		unsigned int neighbor(unsigned int i, unsigned int k) const
+		FORCE_INLINE unsigned int neighbor(unsigned int i, unsigned int k) const
 		{
 			return hipNSearch.point_set(particleIndex).neighbor(particleIndex, i, k);
 		}
@@ -61,11 +65,11 @@ namespace PBD
 		//	//return sortIdx(neighbor(i, k));
 		//}
 
-		unsigned int n_neighborsBoundry(unsigned int i) const
+		FORCE_INLINE unsigned int n_neighborsBoundry(unsigned int i) const
 		{
 			return hipNSearch.point_set(boundryIndex).n_neighbors(boundryIndex, i);
 		}
-		unsigned int neighborBoundry(unsigned int i, unsigned int k) const
+		FORCE_INLINE unsigned int neighborBoundry(unsigned int i, unsigned int k) const
 		{
 			return hipNSearch.point_set(boundryIndex).neighbor(boundryIndex, i, k);
 		}

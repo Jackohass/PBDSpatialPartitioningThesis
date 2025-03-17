@@ -1,0 +1,35 @@
+[2025-03-13 09:30:34] Debug:   Git refspec: refs/heads/master
+[2025-03-13 09:30:34] Debug:   Git SHA1:    af02d55442e2400b6d02027cba0ade4be156ceea
+[2025-03-13 09:30:34] Debug:   Git status:  DIRTY
+[2025-03-13 09:30:34] Debug:   Host name:   BETTAN
+[2025-03-13 09:30:34] Info:    PositionBasedDynamics 2.2.0
+[2025-03-13 09:30:35] Info:    OpenGL version 4.6
+[2025-03-13 09:30:35] Info:    Vendor: ATI Technologies Inc.
+[2025-03-13 09:30:35] Info:    Renderer: AMD Radeon RX 7900 XTX
+[2025-03-13 09:30:35] Info:    Version: 4.6.0 Compatibility Profile Context 24.2.1.240215
+[2025-03-13 09:30:35] Info:    Initialize fluid particles
+[2025-03-13 09:30:35] Info:    Number of particles: 4500
+[2025-03-13 09:30:38] Info:    Average time neighborhood search with 513 calls: 0.820234 ms
+[2025-03-13 09:30:38] Info:    Average time constraint projection with 513 calls: 2.69371 ms
+[2025-03-13 09:30:38] Info:    Average time XSPH viscosity computation with 513 calls: 0.31581 ms
+[2025-03-13 09:30:38] Info:    Average time SimStep with 513 calls: 3.90812 ms
+[2025-03-13 09:30:38] Info:    ---------------------------------------------------------------------------
+
+[2025-03-13 09:30:41] Info:    Average time neighborhood search with 513 calls: 0.818528 ms
+[2025-03-13 09:30:41] Info:    Average time constraint projection with 513 calls: 4.14369 ms
+[2025-03-13 09:30:41] Info:    Average time XSPH viscosity computation with 513 calls: 0.497404 ms
+[2025-03-13 09:30:41] Info:    Average time SimStep with 513 calls: 5.53815 ms
+[2025-03-13 09:30:41] Info:    ---------------------------------------------------------------------------
+
+[2025-03-13 09:30:44] Info:    Average time neighborhood search with 521 calls: 0.820162 ms
+[2025-03-13 09:30:44] Info:    Average time constraint projection with 521 calls: 4.13463 ms
+[2025-03-13 09:30:44] Info:    Average time XSPH viscosity computation with 521 calls: 0.495509 ms
+[2025-03-13 09:30:44] Info:    Average time SimStep with 521 calls: 5.52879 ms
+[2025-03-13 09:30:44] Info:    ---------------------------------------------------------------------------
+
+[2025-03-13 09:30:44] Info:    Time sum neighborhood search: 427.304 ms
+[2025-03-13 09:30:44] Info:    Time sum constraint projection: 2154.14 ms
+[2025-03-13 09:30:44] Info:    Time sum XSPH viscosity computation: 258.16 ms
+[2025-03-13 09:30:44] Info:    Time sum SimStep: 2880.5 ms
+[2025-03-13 09:30:44] Info:    ---------------------------------------------------------------------------
+
