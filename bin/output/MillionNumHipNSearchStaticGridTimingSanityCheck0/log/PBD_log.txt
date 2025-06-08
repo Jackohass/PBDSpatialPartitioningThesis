@@ -1,0 +1,43 @@
+[2025-05-13 15:15:32] Debug:   Git refspec: refs/heads/master
+[2025-05-13 15:15:32] Debug:   Git SHA1:    13fa22bef8a44738d08b21c8ea64c129c7ea871d
+[2025-05-13 15:15:32] Debug:   Git status:  DIRTY
+[2025-05-13 15:15:32] Debug:   Host name:   BETTAN
+[2025-05-13 15:15:32] Info:    PositionBasedDynamics 2.2.0
+[2025-05-13 15:15:33] Info:    OpenGL version 4.6
+[2025-05-13 15:15:33] Info:    Vendor: ATI Technologies Inc.
+[2025-05-13 15:15:33] Info:    Renderer: AMD Radeon RX 7900 XTX
+[2025-05-13 15:15:33] Info:    Version: 4.6.0 Compatibility Profile Context 24.2.1.240215
+[2025-05-13 15:15:33] Info:    Initialize fluid particles
+[2025-05-13 15:15:34] Info:    Number of particles: 1010282
+[2025-05-13 15:22:35] Info:    Average time Unnecessary Copy with 513 calls: 1.42886 ms
+[2025-05-13 15:22:35] Info:    Average time Run hipNSearch with 513 calls: 50.5882 ms
+[2025-05-13 15:22:35] Info:    Average time neighborhood search with 513 calls: 52.0269 ms
+[2025-05-13 15:22:35] Info:    Average time constraint projection with 513 calls: 575.89 ms
+[2025-05-13 15:22:35] Info:    Average time XSPH viscosity computation with 513 calls: 81.8251 ms
+[2025-05-13 15:22:35] Info:    Average time SimStep with 513 calls: 725.312 ms
+[2025-05-13 15:22:35] Info:    ---------------------------------------------------------------------------
+
+[2025-05-13 15:29:20] Info:    Average time Unnecessary Copy with 513 calls: 1.41481 ms
+[2025-05-13 15:29:20] Info:    Average time Run hipNSearch with 513 calls: 26.6958 ms
+[2025-05-13 15:29:20] Info:    Average time neighborhood search with 513 calls: 28.12 ms
+[2025-05-13 15:29:20] Info:    Average time constraint projection with 513 calls: 568.439 ms
+[2025-05-13 15:29:20] Info:    Average time XSPH viscosity computation with 513 calls: 81.226 ms
+[2025-05-13 15:29:20] Info:    Average time SimStep with 513 calls: 693.31 ms
+[2025-05-13 15:29:20] Info:    ---------------------------------------------------------------------------
+
+[2025-05-13 15:36:13] Info:    Average time Unnecessary Copy with 521 calls: 1.41405 ms
+[2025-05-13 15:36:13] Info:    Average time Run hipNSearch with 521 calls: 27.3824 ms
+[2025-05-13 15:36:13] Info:    Average time neighborhood search with 521 calls: 28.8064 ms
+[2025-05-13 15:36:13] Info:    Average time constraint projection with 521 calls: 570.94 ms
+[2025-05-13 15:36:13] Info:    Average time XSPH viscosity computation with 521 calls: 81.4586 ms
+[2025-05-13 15:36:13] Info:    Average time SimStep with 521 calls: 696.727 ms
+[2025-05-13 15:36:13] Info:    ---------------------------------------------------------------------------
+
+[2025-05-13 15:36:13] Info:    Time sum Unnecessary Copy: 736.719 ms
+[2025-05-13 15:36:13] Info:    Time sum Run hipNSearch: 14266.2 ms
+[2025-05-13 15:36:13] Info:    Time sum neighborhood search: 15008.1 ms
+[2025-05-13 15:36:13] Info:    Time sum constraint projection: 297460 ms
+[2025-05-13 15:36:13] Info:    Time sum XSPH viscosity computation: 42440 ms
+[2025-05-13 15:36:13] Info:    Time sum SimStep: 362995 ms
+[2025-05-13 15:36:13] Info:    ---------------------------------------------------------------------------
+

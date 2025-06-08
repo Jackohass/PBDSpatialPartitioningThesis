@@ -137,6 +137,30 @@ int main(int argc, char** argv)
 	printf("%d, %d, %d\n", width, depth, height);
 	printf("%f, %f, %f\n", containerWidth, containerDepth, containerHeight);
 
+	printf("Spatial partition version: ");
+#if defined(FSPH)
+#if defined(CPUCACHEOPT)
+	printf("CPU cache optimized FSPH\n");
+#else
+	printf("FSPH\n");
+#endif
+#elif defined(nSearch)
+#if defined(STATICGRID)
+	printf("hipNSearch with a staticgrid\n");
+#else
+	printf("hipNSearch\n");
+#endif
+#else
+	printf("Default\n");
+#endif
+#if defined(TAKETIME)
+	printf("Taking full timings\n");
+#elif defined(MINIMUMTIMING)
+	printf("Taking minimal timings\n");
+#else
+	printf("Doing no timings\n");
+#endif
+
 	// we use an own time step controller
 	delete PBD::Simulation::getCurrent()->getTimeStep();
 	PBD::Simulation::getCurrent()->setTimeStep(nullptr);

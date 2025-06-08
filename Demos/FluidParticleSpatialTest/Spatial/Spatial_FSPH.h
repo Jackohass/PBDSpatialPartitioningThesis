@@ -40,10 +40,10 @@ namespace PBD
 		{
 			return nSearch.point_set(particleIndex).neighbor_list(particleIndex, i);
 		}*/
-		FORCE_INLINE unsigned int neighbor(unsigned int i, unsigned int k) const
+		/*FORCE_INLINE unsigned int neighbor(unsigned int i, unsigned int k) const
 		{
 			return neigh->neighbors[neigh->offsets[i] + k];
-		}
+		}*/
 #ifndef CPUCACHEOPT
 		FORCE_INLINE unsigned int partIdx(unsigned int i) const
 		{
@@ -53,9 +53,9 @@ namespace PBD
 		{
 			return part2Idx[i];
 		}
-		FORCE_INLINE unsigned int invNeighbor(unsigned int i, unsigned int k) const
+		FORCE_INLINE unsigned int neighbor(unsigned int i, unsigned int k) const
 		{
-			return idxIdx(neighbor(i, k));
+			return idxIdx(neigh->neighbors[neigh->offsets[i] + k]);
 		}
 #endif
 #ifdef CPUCACHEOPT
@@ -63,9 +63,9 @@ namespace PBD
 		{
 			return i;
 		}
-		FORCE_INLINE unsigned int invNeighbor(unsigned int i, unsigned int k) const
+		FORCE_INLINE unsigned int neighbor(unsigned int i, unsigned int k) const
 		{
-			return neighbor(i, k);
+			return neigh->neighbors[neigh->offsets[i] + k];
 		}
 #endif
 

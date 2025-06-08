@@ -15,6 +15,7 @@
 #include <chrono>
 #include "IDFactory.h"
 #include "cuNSearch_export.h"
+#include "../include/Common.h"
 
 #include <fstream>
 #include <sstream>
@@ -24,8 +25,13 @@
 #define PRINT_STATS true
 #define USE_TIMING(x) x;
 #else
+#ifdef TIMING
 #define PRINT_STATS true
 #define USE_TIMING(x) x;
+#else
+#define PRINT_STATS false
+#define USE_TIMING(x);
+#endif
 #endif
 
 namespace cuNSearch

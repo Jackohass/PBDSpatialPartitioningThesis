@@ -29,16 +29,16 @@ int main()
     string input;
     cin >> input;
 
-    runTests("DefaultTiming", input);
+    //runTests("DefaultTiming", input);
     runTests("FSPHTiming", input);
-	runTests("FSPHCPUOPTTiming", input);
+	/*runTests("FSPHCPUOPTTiming", input);
 	runTests("HipNSearchTiming", input);
-	runTests("HipNSearchStaticGridTiming", input);
-	runTests("Default", input);
+	runTests("HipNSearchStaticGridTiming", input);*/
+	/*runTests("Default", input);
     runTests("FSPH", input);
 	runTests("FSPHCPUOPT", input);
     runTests("HipNSearch", input);
-	runTests("HipNSearchStaticGrid", input);
+	runTests("HipNSearchStaticGrid", input);*/
 
     return 0;
 }
