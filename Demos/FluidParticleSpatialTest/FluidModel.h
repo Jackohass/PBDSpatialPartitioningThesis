@@ -6,8 +6,8 @@
 #include "Simulation/NeighborhoodSearchSpatialHashing.h"
 
 
-#define nSearch
-//#define FSPH
+//#define nSearch
+#define FSPH
 
 #if defined(FSPH)
 #include "Spatial/Spatial_FSPH.h"

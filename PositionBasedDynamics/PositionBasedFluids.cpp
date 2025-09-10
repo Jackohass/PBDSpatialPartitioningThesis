@@ -17,8 +17,13 @@ bool PositionBasedFluids::computePBFDensity(
 	const Real density0,
 	const bool boundaryHandling,
 	Real &density_err,
-	Real &density)
+	Real &density,
+	int sumFrag[])
 {
+	int runSign = 0;
+	int frag = 0;
+	int sign = 0;
+
 	// Compute current density for particle i
 	density = mass[particleIndex] * CubicKernel::W_zero();
 	for (unsigned int j = 0; j < numNeighbors; j++)
@@ -27,13 +32,23 @@ bool PositionBasedFluids::computePBFDensity(
 		if (neighborIndex < numberOfParticles)		// Test if fluid particle
 		{
 			density += mass[neighborIndex] * CubicKernel::W(x[particleIndex] - x[neighborIndex]);
+
+			if (sign == -1) frag++;
+			sign = 1;
+			runSign++;
 		}
 		else if (boundaryHandling)
 		{
 			// Boundary: Akinci2012
 			density += boundaryPsi[neighborIndex - numberOfParticles] * CubicKernel::W(x[particleIndex] - boundaryX[neighborIndex - numberOfParticles]);
+
+			if (sign == 1) frag++;
+			sign = -1;
+			runSign--;
 		}
 	}
+
+	sumFrag[particleIndex] = frag;
 
 	density_err = std::max(density, density0) - density0;
 	return true;

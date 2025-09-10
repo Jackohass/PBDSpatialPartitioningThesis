@@ -6,6 +6,8 @@
 #include "Simulation/Simulation.h"
 #include "Utils/Timing.h"
 
+#include <omp.h>
+
 #include <set>
 #include <numeric>
 #include <algorithm>
@@ -82,7 +84,8 @@ void TimeStepFluidModel::step(FluidModel &model)
 		sum += model.getNeighborhoodSearch()->n_neighbors(sortIdx);
 	}
 	neighborSum += sum;
-	printf("Running Average: %f\n", (double)neighborSum / (double)numRuns);
+	//printf("Running Average: %f\n", (double)neighborSum / (double)numRuns);
+	//printf("%d,\n", neighborSum);
 
 	// Solve density constraint
 #ifdef TAKETIME
@@ -239,11 +242,17 @@ void TimeStepFluidModel::constraintProjection(FluidModel &model)
 	{
 		Real avg_density_err = 0.0;
 
+		int sumFrag[4500];// = 0;
+
 		#pragma omp parallel default(shared)
 		{
 			#pragma omp for schedule(static)  
 			for (int i = 0; i < (int)nParticles; i++)
 			{
+				int runSign = 0;
+				int frag = 0;
+				int sign = 0;
+
 				Real density_err;
 #if defined(FSPH) || defined(nSearch)
 #if defined(FSPH)
@@ -267,14 +276,34 @@ void TimeStepFluidModel::constraintProjection(FluidModel &model)
 					if (neighborIndex < nParticles)		// Test if fluid particle
 					{
 						density += mass[neighborIndex] * CubicKernel::W(x[i] - x[neighborIndex]);
+						
+						if (sign == -1) frag++;
+						sign = 1;
+						runSign++;
 					}
 					else
 					{
 						// Boundary: Akinci2012
 						density += boundaryPsi[neighborIndex - nParticles] * CubicKernel::W(x[i] - boundaryX[neighborIndex - nParticles]);
+						
+						if (sign == 1) frag++;
+						sign = -1;
+						runSign--;
+					}
+					if (omp_get_thread_num() == 1)
+					{
+						//printf("%d, ", runSign);
 					}
 				}
 				density_err = std::max(density, density0) - density0;
+
+				//if (omp_get_thread_num() == 1)
+				//{
+				//	sumFrag += frag;
+				//	//printf("%d\n", frag);
+				//}
+				//printf("%d\n", frag);
+				sumFrag[i] = frag;
 
 				/*----*/
 				const Real constDensity = density;
@@ -318,7 +347,7 @@ void TimeStepFluidModel::constraintProjection(FluidModel &model)
 					lambda = 0.0;
 #else
 				PositionBasedFluids::computePBFDensity(i, nParticles, &pd.getPosition(0), &pd.getMass(0), &model.getBoundaryX(0), 
-					&model.getBoundaryPsi(0), numNeighbors[i], neighbors[i], model.getDensity0(), true, density_err, model.getDensity(i));
+					&model.getBoundaryPsi(0), numNeighbors[i], neighbors[i], model.getDensity0(), true, density_err, model.getDensity(i), sumFrag);
 				PositionBasedFluids::computePBFLagrangeMultiplier(i, nParticles, &pd.getPosition(0), &pd.getMass(0), &model.getBoundaryX(0), 
 					&model.getBoundaryPsi(0), model.getDensity(i), numNeighbors[i], neighbors[i], model.getDensity0(), true, model.getLambda(i));
 #endif
@@ -327,6 +356,18 @@ void TimeStepFluidModel::constraintProjection(FluidModel &model)
 			}
 		}
 		
+		if (iter == 0)
+		{
+			int sumSum = 0;
+			for (int i = 0; i < nParticles; i++)
+			{
+				sumSum += sumFrag[i];
+
+			}
+			printf("%d\n", sumSum);
+			//printf("%d\n", sumFrag);
+		}
+
 		#pragma omp parallel default(shared)
 		{
 			#pragma omp for schedule(static)  

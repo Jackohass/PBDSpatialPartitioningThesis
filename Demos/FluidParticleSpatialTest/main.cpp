@@ -266,7 +266,7 @@ void selection(const Vector2i &start, const Vector2i &end, void *clientData)
 int numberOfTimeSteps = 0;
 int numResets = 0;
 #define STOPATTIMESTEP 512
-#define RESETNUM 2
+#define RESETNUM 0
 #endif // TAKETIME
 void timeStep ()
 {

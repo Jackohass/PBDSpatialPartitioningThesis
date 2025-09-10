@@ -47,7 +47,8 @@ namespace PBD
 			const Real density0,							// rest density
 			const bool boundaryHandling,					// perform boundary handling (Akinci2012)
 			Real &density_err,								// returns the clamped density error (can be used for enforcing a maximal global density error)
-			Real &density);								// return the density
+			Real &density,
+			int sumFrag[]);								// return the density
 
 		/**
 		 * Compute Lagrange multiplier \f$\lambda_i\f$ for a fluid particle which is required by

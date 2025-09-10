@@ -3,7 +3,7 @@
 #include "Common/Common.h"
 #include "Utils/Timing.h"
 
-//#define STATICGRID
+#define STATICGRID
 
 #include "hipNSearch/cuNSearch.h"
 

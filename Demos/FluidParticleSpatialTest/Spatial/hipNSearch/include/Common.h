@@ -1,7 +1,7 @@
 #pragma once
 // This is a public header. Avoid references to cuda or other external references.
 
-//#define STATICGRID
+#define STATICGRID
 #define TIMING
 
 namespace cuNSearch
