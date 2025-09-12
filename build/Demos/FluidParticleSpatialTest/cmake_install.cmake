@@ -1,4 +1,4 @@
-# Install script for directory: D:/projects/master_thesis/code/PBDSpatialPartitioningThesis/Demos/FluidParticleSpatialTest
+# Install script for directory: C:/projects/thesis/code/PBDSpatialPartitioningThesis/Demos/FluidParticleSpatialTest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

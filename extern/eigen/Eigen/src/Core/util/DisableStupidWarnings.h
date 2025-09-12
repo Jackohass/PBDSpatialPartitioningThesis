@@ -74,6 +74,7 @@
 #endif
 
 #if defined __NVCC__
+#define diag_suppress nv_diag_suppress
   #pragma diag_suppress boolean_controlling_expr_is_constant
   // Disable the "statement is unreachable" message
   #pragma diag_suppress code_is_unreachable
