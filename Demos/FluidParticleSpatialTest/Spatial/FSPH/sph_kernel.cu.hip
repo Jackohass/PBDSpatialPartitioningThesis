@@ -306,7 +306,11 @@ void kncomputeNeighboursCount(int* cell_offset_M, ParticleIdxRange range, Partic
 }
 
 __global__ 
-void kncomputeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBufferList buff_list, int* cindex, int* cell_offset, int* cell_num, BlockTask* block_task, int bt_offset, int* neighbours, int* neighboursOffset, int* neighborCounts)
+void kncomputeNeighbours(int* cell_offset_M, ParticleIdxRange range, ParticleBufferList buff_list, int* cindex, int* cell_offset, int* cell_num, BlockTask* block_task, int bt_offset, int* neighbours, int* neighboursOffset, int* neighborCounts
+#ifdef CPUCACHEOPT 
+    , int* p2i, int* i2p
+#endif
+)
 {
     if (blockIdx.x < bt_offset) {
         int self_idx = threadIdx.x + __umul24(blockIdx.x, blockDim.x) + range.begin;
@@ -460,7 +464,7 @@ void computeNeighbours(
 #endif // TAKETIME
 
 #ifdef TAKETIME
-    START_TIMING("Full count array and resize neighbour array");
+    START_TIMING("Fill count array and resize count array");
 #endif // TAKETIME
     neigh->dNeighborCounts.resize(neigh->particleCount);
 
