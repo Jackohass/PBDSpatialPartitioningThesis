@@ -1,4 +1,6 @@
 # PositionBasedDynamics
+This repo is my thesis work where I compared two GPU spatial partioning algorithms, [hipNSearch]{https://github.com/Jackohass/hipNSearch/tree/master} & [FSPH]{https://github.com/Jackohass/Fastest-SPH-framework/tree/main} on the XPBD water simulation from this repo.
+The code, files, and build is a bit of a mess. I beg to the coding gods and ask my previous programming teachers for forgiveness for my improper use of, well more like lack of, proper build tools. I will add that in the future.
 
 <p align=center><img src="https://github.com/InteractiveComputerGraphics/PositionBasedDynamics/workflows/build-linux/badge.svg">&nbsp;&nbsp; <img src="https://github.com/InteractiveComputerGraphics/PositionBasedDynamics/workflows/build-windows/badge.svg">&nbsp;&nbsp; <a href='https://positionbaseddynamics.readthedocs.io/en/latest/?badge=latest'><img src='https://readthedocs.org/projects/positionbaseddynamics/badge/?version=latest' alt='Documentation Status' /></a></p>
 
